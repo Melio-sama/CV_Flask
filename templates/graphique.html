@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Métrique</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+    <div id="chart_div"></div>
+
+    <script>
+        google.charts.load('current', { packages: ['corechart'] });
+        google.charts.setOnLoadCallback(drawBackgroundColor);
+
+        function drawBackgroundColor() {
+            // Récupérer les données depuis la nouvelle route Flask
+            fetch('/chart_data/5625719273')  // Remplacez 5625719273 par votre clé API
+                .then(response => response.json())
+                .then(data => {
+                    var dataTable = new google.visualization.DataTable();
+                    dataTable.addColumn('string', 'Jour');
+                    dataTable.addColumn('number', 'Messages');
+
+                    data.results.forEach(entry => {
+                        dataTable.addRow([entry.Jour, entry.Messages]);
+                    });
+
+                    var options = {
+                        title: 'Messages clients',
+                        curveType: 'function',
+                        legend: { position: 'bottom' }
+                    };
+
+                    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+                    chart.draw(dataTable, options);
+                });
+        }
+    </script>
+</body>
+</html>
