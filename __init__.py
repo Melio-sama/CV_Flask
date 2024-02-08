@@ -18,5 +18,13 @@ def resume_2():
 def resume_template():
     return render_template("resume_template.html")
 
+@app.route('/consultation/')
+def ReadBDD():
+    conn = sqlite3.connect('database.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM clients;')
+    data = cursor.fetchall()
+    conn.close()
+
 if(__name__ == "__main__"):
     app.run()
